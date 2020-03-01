@@ -11,7 +11,9 @@
         // Default is to fail on error, no placeholder
         imagePlaceholder: undefined,
         // Default cache bust is false, it will use the cache
-        cacheBust: false
+        cacheBust: false,
+        embedFonts: true,
+        embedImages: true
     };
 
     var domtoimage = {
@@ -51,14 +53,14 @@
      * @return {Promise} - A promise that is fulfilled with a SVG image data URL
      * */
     function toSvg(node, options) {
-        options = options || {};
+        options = Object.assign({}, defaultOptions, options);
         copyOptions(options);
         return Promise.resolve(node)
             .then(function (node) {
                 return cloneNode(node, options.filter, true);
             })
-            .then(embedFonts)
-            .then(inlineImages)
+            .then(options.embedFonts && embedFonts)
+            .then(options.embedImages && inlineImages)
             .then(applyOptions)
             .then(function (clone) {
                 return makeSvgDataUri(clone,
@@ -135,18 +137,7 @@
     }
 
     function copyOptions(options) {
-        // Copy options to impl options for use in impl
-        if(typeof(options.imagePlaceholder) === 'undefined') {
-            domtoimage.impl.options.imagePlaceholder = defaultOptions.imagePlaceholder;
-        } else {
-            domtoimage.impl.options.imagePlaceholder = options.imagePlaceholder;
-        }
-
-        if(typeof(options.cacheBust) === 'undefined') {
-            domtoimage.impl.options.cacheBust = defaultOptions.cacheBust;
-        } else {
-            domtoimage.impl.options.cacheBust = options.cacheBust;
-        }
+      domtoimage.impl.options = options;
     }
 
     function draw(domNode, options) {

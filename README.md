@@ -155,6 +155,14 @@ Set to true to append the current time as a query string to URL requests to enab
 
 A data URL for a placeholder image that will be used when fetching an image fails. Defaults to undefined and will throw an error on failed images
 
+### embedFonts
+
+Embed web fonts in toSvg. turned on by default.
+
+### embedImages
+
+Embed images data in toSvg. turned on by default.
+
 ## Browsers
 
 It's tested on latest Chrome and Firefox (49 and 45 respectively at the time
