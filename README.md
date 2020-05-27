@@ -163,6 +163,10 @@ Embed web fonts in toSvg. turned on by default.
 
 Embed images data in toSvg. turned on by default.
 
+### shouldEmbedImage
+
+A function that decides if a given HTMLImageElement node should be embedded or not (return true/false)
+
 ## Browsers
 
 It's tested on latest Chrome and Firefox (49 and 45 respectively at the time

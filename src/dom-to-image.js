@@ -49,6 +49,9 @@
      * @param {Number} options.quality - a Number between 0 and 1 indicating image quality (applicable to JPEG only),
                 defaults to 1.0.
      * @param {String} options.imagePlaceholder - dataURL to use as a placeholder for failed images, default behaviour is to fail fast on images we can't fetch
+     * @param {Boolean} options.embedFonts - Embed web fonts. turned on by default.
+     * @param {Boolean} options.embedImages - Embed images. turned on by default.
+     * @param {Function} options.shouldEmbedImage - Should return true if passed image node should be embedded. optional.
      * @param {Boolean} options.cacheBust - set to true to cache bust by appending the time to the request url
      * @return {Promise} - A promise that is fulfilled with a SVG image data URL
      * */
@@ -728,8 +731,13 @@
 
             return inlineBackground(node)
                 .then(function () {
-                    if (node instanceof HTMLImageElement)
-                        return newImage(node).inline();
+                    if (node instanceof HTMLImageElement) {
+                        if (domtoimage.impl.options.shouldEmbedImage && domtoimage.impl.options.shouldEmbedImage(node)) {
+                            return newImage(node).inline();
+                        } else {
+                            return Promise.resolve(node);
+                        }
+                    }
                     else
                         return Promise.all(
                             util.asArray(node.childNodes).map(function (child) {
