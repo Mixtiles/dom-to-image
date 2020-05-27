@@ -62,7 +62,7 @@
             .then(function (node) {
                 return cloneNode(node, options.filter, true);
             })
-            .then(options.embedFonts && inlineFonts)
+            .then(options.embedFonts && embedFonts)
             .then(options.embedImages && inlineImages)
             .then(applyOptions)
             .then(function (clone) {
@@ -303,7 +303,7 @@
         }
     }
 
-    function inlineFonts(node) {
+    function embedFonts(node) {
         return fontFaces.resolveAll()
             .then(function (cssText) {
                 var styleNode = document.createElement('style');
@@ -732,7 +732,7 @@
             return inlineBackground(node)
                 .then(function () {
                     if (node instanceof HTMLImageElement) {
-                        if (domtoimage.impl.options.shouldEmbedImage && domtoimage.impl.options.shouldEmbedImage(node)) {
+                        if (domtoimage.impl.options.shouldEmbedImage ? domtoimage.impl.options.shouldEmbedImage(node) : true) {
                             return newImage(node).inline();
                         } else {
                             return Promise.resolve(node);
