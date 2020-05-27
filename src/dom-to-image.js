@@ -62,7 +62,7 @@
             .then(function (node) {
                 return cloneNode(node, options.filter, true);
             })
-            .then(options.embedFonts && embedFonts)
+            .then(options.embedFonts && inlineFonts)
             .then(options.embedImages && inlineImages)
             .then(applyOptions)
             .then(function (clone) {
@@ -303,7 +303,7 @@
         }
     }
 
-    function embedFonts(node) {
+    function inlineFonts(node) {
         return fontFaces.resolveAll()
             .then(function (cssText) {
                 var styleNode = document.createElement('style');
